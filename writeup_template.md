@@ -40,7 +40,7 @@ Here is an example using HOG parameters of `orientations=9`, `pixels_per_cell=(8
 
 ![][image1]  
 
-Visualized color space in 3D plot using `plot3d()`, the code for this step is contained in the fifth code cell of the IPython notebook. After explored different color spaces like `RGB, HSV, HLS, YCrCb`, found out the `HLS` color space in the car images, cluster the objects well and stands out against the background as following:  
+Visualized color space in 3D plot using `plot3d()`, the code for this step is contained in the fifth code cell of the IPython notebook. After explored different color spaces like `RGB, HSV, HLS, YCrCb`, found out the `YCrCb` color space in the car images, cluster the objects well and stands out against the background. Here are some of explore color space plot:  
 
 |              vehicle                    |                     non-vehicle                        | 
 | :-------------------------------------: |:------------------------------------------------------:|
@@ -50,10 +50,10 @@ Visualized color space in 3D plot using `plot3d()`, the code for this step is co
 
 ####2. Explain how you settled on your final choice of HOG parameters.
 
-I tried various combinations of parameters and found out HOG parameters of `orientations=11`, `pixels_per_cell=(8, 8)`, `hog_channel = "ALL"` and `cells_per_block=(2, 2)` have the highest test accuracy = 0.9825 the HOG parameters tuning code is contained in the 6th code cell of the IPython notebook, the Results are as following:
+I tried various combinations of parameters and found out HOG parameters of `orientations=11`, `pixels_per_cell=(8, 8)`, `hog_channel = "ALL"` and `cells_per_block=(2, 2)` have the highest test accuracy = 0.9868 the HOG parameters tuning code is contained in the 6th code cell of the IPython notebook, the Results are as following:
   
 ```
-93.86 Seconds to extract HOG features...
+98.27 Seconds to extract HOG features...
 Using: 11 orientations 8 pixels per cell and 2 cells per block
 Feature vector length: 6468
 ```  
@@ -64,11 +64,11 @@ I trained a linear SVM using a balanced dataset provided by udacity, i.e., have 
 Then create an array stack of feature vectors and define the labels vector, then split up data into randomized training and test sets the code is contained in the sixth code cell of the IPython notebook. Then use a `LinearSVC()` to train our classifier, the code is contained in the seventh code cell of the IPython notebook. The Results as following:  
     
 ```
-12.31 Seconds to train SVC...
-Test Accuracy of SVC =  0.9825
-My SVC predicts:  [ 1.  1.  1.  1.  1.  0.  0.  1.  0.  1.]
-For these 10 labels:  [ 1.  1.  1.  1.  1.  0.  0.  1.  0.  1.]
-0.00384 Seconds to predict 10 labels with SVC
+9.25 Seconds to train SVC...
+Test Accuracy of SVC =  0.9868
+My SVC predicts:  [ 1.  1.  1.  0.  1.  0.  0.  1.  1.  1.]
+For these 10 labels:  [ 1.  1.  1.  0.  1.  0.  0.  1.  1.  1.]
+0.0057 Seconds to predict 10 labels with SVC
 ``` 
 ###Sliding Window Search
 
@@ -77,7 +77,7 @@ For these 10 labels:  [ 1.  1.  1.  1.  1.  0.  0.  1.  0.  1.]
 Like I learned from Behavior cloning project, I restricting search area on the image with `ystart` and `ystop` in the `find_cars()` function to filter out the unwanted noise as start. The find_cars only extract hog features once and then can be sub-sampled to get all of its overlaying windows. Each window is defined by a scaling factor `scale` where a scale of 1 would result in a window that's 8 x 8 cells then the overlap of each window is in terms of the cell distance. This means that a cells_per_step = 2 would result in a search window overlap of 75%. Then run this same function multiple times for different scale values to generate multiple-scaled search windows. The search area, scale and HOG parameters are defined in `process_img()` and `video_pipeline()` in the 10thand 15th code cell of the the IPython notebook as follow:  
 
 ```
-    colorspace = 'HLS' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
+    colorspace = 'YCrCb' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
     orient = 11
     pix_per_cell = 8
     cell_per_block = 2
@@ -97,7 +97,7 @@ Like I learned from Behavior cloning project, I restricting search area on the i
 
 ####2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
-Ultimately I searched on four scales using HLS 3-channel HOG features in the feature vector, which provided a nice result.  Here are some example images:
+Ultimately I searched on four scales using YCrCb 3-channel HOG features in the feature vector, which provided a nice result.  Here are some example images:
 
 ![][image4]
 
@@ -105,7 +105,7 @@ Ultimately I searched on four scales using HLS 3-channel HOG features in the fea
 ### Video Implementation
 
 ####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
-Here's a [link to my video result](https://www.youtube.com/watch?v=TF3tz-DH5r4) and another [link to my video result combined with Advanced Lane Lines project results](https://www.youtube.com/watch?v=4TGBOHBwAMM)
+Here's a [link to my video result](https://www.youtube.com/watch?v=ElI4HmAOJfY) and another [link to my video result combined with Advanced Lane Lines project results](https://www.youtube.com/watch?v=mixOeI5b8ZY)
 
 
 ####2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
